@@ -22,17 +22,13 @@ library(shinythemes)
 
 
 # Drop-down boxes
-MMI <- "MassDEP_2019_Bugs"
-Community <- c("bugs")
+MMI <- "SNEP_2020_Bugs"
 
 
 # File Size
 # By default, the file size limit is 5MB. It can be changed by
 # setting this option. Here we'll raise limit to 10MB.
 options(shiny.maxRequestSize = 25*1024^2)
-
-# source function from metric.values.MI.R
-source(file.path(".", "external", "metric.values.MA.R"))
 
 
 # define which metrics michigan wants to keep in indices

@@ -101,7 +101,9 @@ shinyServer(function(input, output, session) {
                               ,"EXCLUDE"
                               ,"NONTARGET"
                               ,"PHYLUM"
+                              ,"SUBPHYLUM"
                               ,"CLASS"
+                              ,"SUBCLASS"
                               ,"ORDER"
                               ,"FAMILY"
                               ,"SUBFAMILY"
@@ -110,7 +112,6 @@ shinyServer(function(input, output, session) {
                               ,"FFG"
                               ,"TOLVAL"
                               ,"HABIT"
-                              ,"THERMAL_INDICATOR"
                               ,"LIFE_CYCLE")
 
         column_names <- colnames(df_input)

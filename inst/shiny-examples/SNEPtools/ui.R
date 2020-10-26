@@ -7,22 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-# Packages
-# library(shiny)
-# library(DT)
-# library(ggplot2)
-# library(readxl)
-# library(reshape2)
-# library(dplyr)
-# library(utils)
-# library(BioMonTools)
-# library(knitr)
-# library(maps)
-# library(rmarkdown)
-# library(tidyr)
-# library(plotly)
-# library(shinyjs) # used for download button enable
-
 # test for rendering markdown
 fn_html <- file.path(".", "Extras", "App_Instructions.rmd")
 sapply(fn_html, knit, quiet = T)
@@ -30,10 +14,11 @@ sapply(fn_html, knit, quiet = T)
 
 
 # Define UI
-shinyUI(navbarPage(theme = shinytheme("united"), "Massachusetts Stream IBI Calculator v0.1.2.908",
+shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.0.900",
                    tabPanel("Instructions",
                             # mainPanel(
 
+                            img(src = "logo.png"),
                             withMathJax(includeMarkdown("App_Instructions.md")),
                             img(src = "figure1.png")
 
@@ -74,7 +59,7 @@ shinyUI(navbarPage(theme = shinytheme("united"), "Massachusetts Stream IBI Calcu
                                     , h4("2. Calculate IBI")
                                     #, selectInput("MMI", "Select an IBI to calculate:",
                                                   #choices=MMIs)
-                                    , h5("Mass Kick IBI or Multihabitat IBI - specified in INDEX_REGION field of input")
+                                    , h5("SNEP Multihabitat IBI - specified in INDEX_REGION field of input")
                                     , actionButton("b_Calc", "Calculate Metric Values and Scores")
                                     , tags$hr()
                                     , h4("3. Download Results")

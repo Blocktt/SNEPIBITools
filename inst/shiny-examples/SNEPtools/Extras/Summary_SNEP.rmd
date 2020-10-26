@@ -1,17 +1,17 @@
 ---
-title: "MassDEP Stream IBI Summary Report"
+title: "Southeast New England Coastal Watershed Restoration Program (SNEP) Stream IBI Summary Report"
 author: "`r Sys.getenv('USERNAME')`"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output:
-  word_document:
-    toc: yes
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
   html_document:
     toc: yes
     toc_depth: 3
     toc_float: no
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  word_document:
+    toc: yes
 subtitle: Metric Scores and Values
 ---
 ```{r setup, include=FALSE}
@@ -25,9 +25,9 @@ if(boo_DEBUG==TRUE){
 ```
 
 # INTRODUCTION
-The following document is dynamic - it changes depending on the data input into the Mass DEP R Shiny Application. 
+The following document is dynamic - it changes depending on the data input into the SNEP R Shiny Application. 
 
-Please refer to the "Data File Information" section for general properties of the input dataset used to genereate this report. 
+Please refer to the "Data File Information" section for general properties of the input dataset used to generate this report. 
 
 Histograms in the "Plots" section will change depending on the input dataset. 
 
@@ -36,9 +36,9 @@ Histograms in the "Plots" section will change depending on the input dataset.
   # Results File
   df_metval <- df_metval
   df_metsc <- df_metsc
-
-  # df_metval <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metval_single.csv")
-  # df_metsc <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metsc_single.csv")
+# 
+#   df_metval <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metval.csv")
+#   df_metsc <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metsc.csv")
   
   # Report Info
   myReportDate <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
@@ -57,7 +57,7 @@ Histograms in the "Plots" section will change depending on the input dataset.
 ```
 
 # SUMMARY TABLES
-### The tables below summarize the data that were input into the shiny app.
+### The tables below summarize the data that were input into the R Shiny Application.
 ### Table 1. Number of sites by Index Narrative and Index Region. 
 ```{r Results_summary_table1, message=FALSE}
 library(knitr)
@@ -119,14 +119,14 @@ kable(table2)
 ```
 
 
-### Table 3. Metrics in the Western Highlands IBI, with scoring formulas. Trend is the direction of metric response with increasing stress. 
+### Table 3. Metrics in the SNEP IBI, with scoring formulas. Trend is the direction of metric response with increasing stress.
 ```{r Results_summary_table_3}
 library(readxl)
 library(knitr)
 # state directories
 table.dir <- "tables"
 table.file <- "Instruction_Tables.xlsx"
-tab3.dir <- "table2"
+tab3.dir <- "table3"
 
 table3 <- read_excel(file.path(table.dir, table.file), sheet = tab3.dir
                      , na = c("NA", ""), trim_ws = TRUE, skip = 0
@@ -135,35 +135,18 @@ table3 <- read_excel(file.path(table.dir, table.file), sheet = tab3.dir
 kable(table3)
 ```
 
-*Beck’s Biotic Index = 2 x [Class 1 Taxa]+[Class 2 Taxa] where Class 1 taxa have tolerance values of 0 or 1 and Class 2 taxa have tolerance values of 2, 3 or 4.
-
-### Table 4. Metrics in the Central Hills IBI, with scoring formulas. Trend is the direction of metric response with increasing stress.
-```{r Results_summary_table_4}
-library(readxl)
-library(knitr)
-# state directories
-table.dir <- "tables"
-table.file <- "Instruction_Tables.xlsx"
-tab4.dir <- "table3"
-
-table4 <- read_excel(file.path(table.dir, table.file), sheet = tab4.dir
-                     , na = c("NA", ""), trim_ws = TRUE, skip = 0
-                     , col_names = TRUE)
-
-kable(table4)
-```
 
 # PLOTS
-## Map of Sites in Massachusetts
-These are the sites that have been input into the R shiny application. 
+## Map of Sites in SNEP region
+These are the sites that have been input into the R Shiny Application. 
 ```{r Results_Site_Map}
 library(ggplot2)
-##### Massachusetts Map of Sites
+##### Map of Sites
 ## Color palette
-region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582")
+region.colors <- c("LowGradientIBI" = "#1f78b4")
 
 ## Map of MA
-m1 <- ggplot(data = subset(map_data("state"), region %in% c("massachusetts"))) + 
+m1 <- ggplot(data = subset(map_data("state"), region %in% c("massachusetts", "rhode island", "connecticut"))) + 
             geom_polygon(aes(x=long, y=lat, group=group), fill="light gray", color="black") +
             coord_fixed(1.3)+
           labs(x= "Longitude",
@@ -197,42 +180,18 @@ library(ggplot2)
 library(dplyr)
 
 # Plot
-region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582") # plot colors
+region.colors <- c("LowGradientIBI" = "#1f78b4") # plot colors
 
-# Western Highlands Scores
+# SNEP scores
 
-WH_data <- df_metsc %>% 
-  filter(INDEX_REGION == "WESTHIGHLANDS") %>% 
+LowGrad_data <- df_metsc %>% 
+  filter(INDEX_REGION == "LowGradientIBI") %>% 
   select_if(~sum(!is.na(.)) > 0)
   
-if(dim(WH_data)[1]==0){
+if(dim(LowGrad_data)[1]==0){
   cat("")
 } else {
-    p1 <- ggplot(WH_data, aes(x = Index, fill = INDEX_REGION))+ 
-    geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
-    labs(x= "Scores",
-         y= "Frequency",
-         fill= "Index Region")+
-    scale_fill_manual(values=region.colors)+
-    theme(text = element_text(size = 12),
-          axis.text = element_text(color = "black", size = 12),
-          axis.text.x = element_text(angle = 0, hjust = 0.5),
-          panel.background = element_rect(fill = "white"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          axis.line = element_line(color = "black"),
-          legend.position = "top")
-} # end if else statement
-# Central Hills Scores
-CH_data <- df_metsc %>% 
-  filter(INDEX_REGION == "CENTRALHILLS")%>% 
-  select_if(~sum(!is.na(.)) > 0)
-  
-if(dim(CH_data)[1]==0){
-  cat("")
-} else {
-      p2 <- ggplot(CH_data, aes(x = Index, fill = INDEX_REGION))+ 
+    p1 <- ggplot(LowGrad_data, aes(x = Index, fill = INDEX_REGION))+ 
     geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
     labs(x= "Scores",
          y= "Frequency",
@@ -250,16 +209,10 @@ if(dim(CH_data)[1]==0){
 } # end if else statement
 # Output
 
-if(dim(WH_data)[1]==0){
+if(dim(LowGrad_data)[1]==0){
   cat("")
 } else {
   p1
-} # end if statement
-
-if(dim(CH_data)[1]==0){
-  cat("")
-} else {
-  p2
 } # end if statement
 
 ```
@@ -272,36 +225,26 @@ Note, metrics are calculated, by BioMonTools package, for all Index Regions even
 
 #create table of metric names
 
-col_metabbrev <- c("nt_total"
-                 ,"pt_EPT"
-                 ,"pi_EphemNoCaeBae"
-                 ,"pi_ffg_filt"
-                 ,"pt_ffg_pred"
-                 ,"pt_tv_intol"
-                 ,"pi_Pleco"
-                 ,"pi_ffg_shred"
-                 ,"pi_tv_intol"
-                 ,"x_Becks")
-col_metscore <- c("SC_nt_total"
-                 ,"SC_pt_EPT"
-                 ,"SC_pi_EphemNoCaeBae"
-                 ,"SC_pi_ffg_filt"
-                 ,"SC_pt_ffg_pred"
-                 ,"SC_pt_tv_intol"
-                 ,"SC_pi_Pleco"
-                 ,"SC_pi_ffg_shred"
-                 ,"SC_pi_tv_intol"
-                 ,"SC_x_Becks")
-col_metnames <- c("Total Taxa Richness"
-                  , "% Plecoptera taxa"
-                  , "% Ephem indiv (no Caenids or Baetids)"
-                  , "% Filterer individuals"
+col_metabbrev <- c("pi_OET"
+                   ,"pt_ffg_pred"
+                   ,"pt_NonIns"
+                   ,"pt_POET"
+                   ,"pt_tv_toler"
+                   ,"pt_volt_semi")
+
+col_metscore <- c("SC_pi_OET"
+                   ,"SC_pt_ffg_pred"
+                   ,"SC_pt_NonIns"
+                   ,"SC_pt_POET"
+                   ,"SC_pt_tv_toler"
+                   ,"SC_pt_volt_semi")
+
+col_metnames <- c("% Odon., Ephem., Trich. individuals"
                   , "% Predator taxa"
-                  , "% Intolerant taxa"
-                  , "% Plecoptera individuals"
-                  , "% Shredder individuals"
-                  , "% Intolerant individuals"
-                  , "Becks Biotic Index")
+                  , "% non-insect taxa"
+                  , "% Plec., Odon., Ephem., Trich. indivs"
+                  , "% tolerant taxa"
+                  , "% semivoltine taxa")
 
 df_metnames <- as.data.frame(cbind(col_metabbrev,col_metscore, col_metnames))
 df_metnames <- df_metnames %>% 
@@ -311,21 +254,21 @@ df_metnames <- df_metnames %>%
 
 # western highlands metrics
 # for columns "ni_total" to ncol(df_metval)
-WH_metval <- df_metval %>% 
-  filter(INDEX_REGION == "WESTHIGHLANDS")
+LowGrad_metval <- df_metval %>% 
+  filter(INDEX_REGION == "LowGradientIBI")
 
 #start column
-if(dim(WH_metval)[1]==0){
+if(dim(LowGrad_metval)[1]==0){
   start_col <- 0
 } else {
-  start_col <- which(colnames(WH_metval)=="nt_total")
+  start_col <- which(colnames(LowGrad_metval)=="pi_OET")
 } # end start_col statement
 
 #end column
-if(dim(WH_metval)[1]==0){
+if(dim(LowGrad_metval)[1]==0){
   end_col <- 0
 } else {
-  end_col <- ncol(WH_metval)
+  end_col <- ncol(LowGrad_metval)
 } # end end_col statement
 
 # CREATE PLOTS - only if data are present
@@ -333,10 +276,10 @@ if(start_col == 0 & end_col == 0){
   cat("")
 } else {
 
-  metval_cols <- colnames(WH_metval[,start_col:end_col])
+  metval_cols <- colnames(LowGrad_metval[,start_col:end_col])
 
 for(i in metval_cols){
-  subset.data <- WH_metval[,c("INDEX_REGION", i)]
+  subset.data <- LowGrad_metval[,c("INDEX_REGION", i)]
   
   subset.data <- subset.data %>% 
     rename(Value = eval(i))
@@ -349,7 +292,7 @@ for(i in metval_cols){
   
   subset.data$INDEX_REGION <- as.factor(subset.data$INDEX_REGION)
   
-  region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582")
+  region.colors <- c("LowGradientIBI" = "#1f78b4")
   
   p3 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
     geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
@@ -373,70 +316,6 @@ for(i in metval_cols){
 } # END of Loop
 } # end if else statement
 
-# central hills metrics
-# for columns "ni_total" to ncol(df_metval)
-CH_metval <- df_metval %>% 
-  filter(INDEX_REGION == "CENTRALHILLS")
-
-#start column
-if(dim(CH_metval)[1]==0){
-  start_col <- 0
-} else {
-  start_col <- which(colnames(CH_metval)=="nt_total")
-} # end start_col statement
-
-#end column
-if(dim(CH_metval)[1]==0){
-  end_col <- 0
-} else {
-  end_col <- ncol(CH_metval)
-} # end end_col statement
-
-# CREATE PLOTS - only if data are present
-if(start_col == 0 & end_col == 0){
-  cat("")
-} else {
-
-  metval_cols <- colnames(CH_metval[,start_col:end_col])
-
-for(i in metval_cols){
-  subset.data <- CH_metval[,c("INDEX_REGION", i)]
-  
-  subset.data <- subset.data %>% 
-    rename(Value = eval(i))
-  
-  subset.metnames <- df_metnames %>% 
-    filter(Met_Abbrev == i)
-    
-  
-  title <- paste0(subset.metnames$Met_Names)
-  
-  subset.data$INDEX_REGION <- as.factor(subset.data$INDEX_REGION)
-  
-  region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582")
-  
-  p4 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
-    geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
-    labs(title = title,
-         x= "Metric Units",
-         y= "Frequency",
-         fill= "Index Region")+
-    scale_fill_manual(values=region.colors)+
-    theme(text = element_text(size = 12),
-          axis.text = element_text(color = "black", size = 12),
-          axis.text.x = element_text(angle = 0, hjust = 0.5),
-          panel.background = element_rect(fill = "white"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          axis.line = element_line(color = "black"),
-          legend.position = "top")
-  
-  print(p4)
-
-} # END of Loop
-} # end if else statement
-
 ```
 
 ## Metric Scores Distribution by Index Region. 
@@ -447,28 +326,28 @@ Only metrics applied within each region are plotted.
 # WESTERN HIGHLANDS
 # for columns "ni_total" to ncol(df_metval)
 # start column
-if(dim(WH_data)[1]==0){
+if(dim(LowGrad_data)[1]==0){
   start_col <- 0
 } else {
-  start_col <- which(colnames(WH_data)=="SC_nt_total")
+  start_col <- which(colnames(LowGrad_data)=="SC_pi_OET")
 } # end start_col statement
 
 # end column
-if(dim(WH_data)[1]==0){
+if(dim(LowGrad_data)[1]==0){
   end_col <- 0
 } else {
-  end_col <- which(colnames(WH_data)=="SC_x_Becks")
+  end_col <- which(colnames(LowGrad_data)=="SC_pt_volt_semi")
 } # end end_col statement
 
 # CREATE PLOTS - only if data are present
 if(start_col == 0 & end_col == 0){
   cat("")
 } else {
-  metsc_cols <- colnames(WH_data[,start_col:end_col])
+  metsc_cols <- colnames(LowGrad_data[,start_col:end_col])
 
 
 for(i in metsc_cols){
-  subset.data <- WH_data[,c("INDEX_REGION", i)]
+  subset.data <- LowGrad_data[,c("INDEX_REGION", i)]
   
   subset.data <- subset.data %>% 
     rename(Value = eval(i))
@@ -483,72 +362,7 @@ for(i in metsc_cols){
   
   subset.data <- subset.data %>% filter(!is.na(Value))
   
-  region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582")
-  
-  p5 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
-    geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
-    labs(title = title,
-         x= "Metric Units",
-         y= "Frequency",
-         fill= "Index Region")+
-    scale_fill_manual(values=region.colors)+
-    theme(text = element_text(size = 12),
-          axis.text = element_text(color = "black", size = 12),
-          axis.text.x = element_text(angle = 0, hjust = 0.5),
-          panel.background = element_rect(fill = "white"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          axis.line = element_line(color = "black"),
-          legend.position = "top")
-  
-  print(p5)
-
-} # END of Loop
-} # end if else statement
-
-
-# CENTRAL HILLS
-# for columns "ni_total" to ncol(df_metval)
-
-# start column
-if(dim(CH_data)[1]==0){
-  start_col <- 0
-} else {
-  start_col <- which(colnames(CH_data)=="SC_nt_total")
-} # end start_col statement
-
-# end column
-if(dim(CH_data)[1]==0){
-  end_col <- 0
-} else {
-  end_col <- which(colnames(CH_data)=="SC_pt_tv_intol")
-} # end end_col statement
-
-# CREATE PLOTS - only if data are present
-if(start_col == 0 & end_col == 0){
-  cat("")
-} else {
-
-metsc_cols <- colnames(CH_data[,start_col:end_col])
-
-for(i in metsc_cols){
-  subset.data <- CH_data[,c("INDEX_REGION", i)]
-  
-  subset.data <- subset.data %>% 
-    rename(Value = eval(i))
-  
-  subset.metnames <- df_metnames %>% 
-    filter(Met_Scores == i)
-    
-  
-  title <- paste0("Met Score - ", subset.metnames$Met_Names)
-  
-  subset.data$INDEX_REGION <- as.factor(subset.data$INDEX_REGION)
-  
-  subset.data <- subset.data %>% filter(!is.na(Value))
-  
-  region.colors <- c("CENTRALHILLS" = "#1f78b4", "WESTHIGHLANDS"= "#f4a582")
+  region.colors <- c("LowGradientIBI" = "#1f78b4")
   
   p5 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
     geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+

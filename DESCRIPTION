@@ -1,7 +1,7 @@
-Package: MassIBItools
+Package: SNEPtools
 Type: Package
-Title: Used to calculate Massachusetts DEP IBI Metrics and scores, and produce output files 
-Version: 0.1.2.902
+Title: Used to calculate Southeast New England Coastal Watershed Restoration Program (SNEP) IBI Metrics and scores, and produce output files 
+Version: 0.1.0.900
 Authors@R: c(
   person("Ben", "Block", email="Ben.Block@tetratech.com", role=c("cre", "aut")),
   person("Erik W.","Leppo", role="aut"),
@@ -30,4 +30,4 @@ Imports:
   stringr,
   shinythemes
 VignetteBuilder: knitr
-URL: https://github.com/Blocktt/MassIBItools
+URL: https://github.com/Blocktt/SNEPtools

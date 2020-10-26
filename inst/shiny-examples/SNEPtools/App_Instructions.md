@@ -1,6 +1,6 @@
 ---
 title: "Instructions and Background Information"
-date: "2020-10-12 16:51:13"
+date: "2020-10-19 11:51:29"
 output:
   md_document:
     toc: yes
@@ -109,32 +109,3 @@ Once open, the user will see the IBI calculator interface. The user should follo
 
 4. Why is there no map shown in the “Sites and Scores Map” tab?
     + The map requires the results of the IBI calculator to render.
-
-# Background: Massachusetts kick net IBIs (v1; 9/24/2020)
-Indices of Biotic Integrity (IBI) were calibrated for Massachusetts Department of Environmental Protection (MassDEP) benthic macroinvertebrate kick net samples in two naturally distinct regions: Western Highlands and Central Hills (Figure 1). Input metrics for the Western Highlands and Central Hills IBIs are shown in Tables 1 & 2, respectively. The new IBIs will improve MassDEP’s diagnostic ability to identify degradation in biological integrity and water quality. Full documentation of development of the kick net IBIs can be found in Jessup and Stamp (2020).
-
-<!-- ![Figure 1. Macroinvertebrate kick IBI stream classes. The southeast areas (Narragansett/Bristol Lowlands, Cape Cod, and the Islands) were excluded because they had insufficient RBP kick net data to develop an IBI at this time.](figures/figure1.png) -->
-
-### Table 2. Metrics in the Western Highlands IBI, with scoring formulas. Trend is the direction of metric response with increasing stress. 
-
-|Metric abbreviation |Metric                                                                         |Trend |Scoring formula               |
-|:-------------------|:------------------------------------------------------------------------------|:-----|:-----------------------------|
-|nt_total            |Number of taxa - total                                                         |Dec.  |100*(metric value)/ 38.8      |
-|pi_Pleco            |Percent individuals - Order Plecoptera                                         |Dec.  |100*(metric value)/ 18.3      |
-|pi_ffg_filt         |Percent individuals - Functional Feeding Group (FFG) - collector-filterer (CF) |Inc.  |100*(50.5-metric value)/ 40.7 |
-|pi_ffg_shred        |Percent individuals - FFG - shredder (SH)                                      |Dec.  |100*(metric value)/ 23        |
-|pi_tv_intol         |Percent individuals - tolerance value - intolerant = 3                         |Dec.  |100*(metric value)/ 51.5      |
-|x_Becks             |Becks Biotic Index*                                                            |Dec.  |100*(metric value)/ 36.8      |
-
-*Beck’s Biotic Index = 2 x [Class 1 Taxa]+[Class 2 Taxa] where Class 1 taxa have tolerance values of 0 or 1 and Class 2 taxa have tolerance values of 2, 3 or 4.
-
-### Table 3. Metrics in the Central Hills IBI, with scoring formulas. Trend is the direction of metric response with increasing stress.
-
-|Metric abbreviation |Metric                                                                              |Trend |Scoring formula               |
-|:-------------------|:-----------------------------------------------------------------------------------|:-----|:-----------------------------|
-|nt_total            |Number of taxa - total                                                              |Dec.  |100*(metric value)/ 34.9      |
-|pt_EPT              |Percent taxa - Orders Ephemeroptera, Plecoptera & Trichoptera (EPT)                 |Dec.  |100*(metric value)/ 54.5      |
-|pi_Ephem NoCaeBae   |Percent individuals - Order Ephemeroptera, excluding Families Caenidae and Baetidae |Dec.  |100*(metric value)/ 13.9      |
-|pi_ffg_filt         |Percent individuals - Functional Feeding Group (FFG) - collector-filterer (CF)      |Inc.  |100*(79.9-metric value)/ 66.9 |
-|pt_ffg_pred         |Percent taxa - Functional Feeding Group (FFG) - predator (PR)                       |Dec.  |100*(metric value)/ 28.5      |
-|pt_tv_intol         |Percent taxa - tolerance value - intolerant = 3                                     |Dec.  |100*(metric value)/ 39.1      |
