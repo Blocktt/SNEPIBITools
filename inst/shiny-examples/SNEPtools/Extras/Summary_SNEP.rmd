@@ -3,15 +3,15 @@ title: "Southeast New England Coastal Watershed Restoration Program (SNEP) Strea
 author: "`r Sys.getenv('USERNAME')`"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output:
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
   html_document:
     toc: yes
     toc_depth: 3
     toc_float: no
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
-  word_document:
-    toc: yes
 subtitle: Metric Scores and Values
 ---
 ```{r setup, include=FALSE}
@@ -33,12 +33,21 @@ Histograms in the "Plots" section will change depending on the input dataset.
 
 # DATA FILE INFORMATION
 ```{r data_file_info}
+library(tidyr)
+library(dplyr)  
   # Results File
+  
   df_metval <- df_metval
   df_metsc <- df_metsc
-# 
-#   df_metval <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metval.csv")
-#   df_metsc <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/results_metsc.csv")
+
+  # df_metval <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/SNEP_results_metval.csv")
+  # df_metsc <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/SNEP_results_metsc.csv")
+  
+  df_metval <- df_metval %>%
+    mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
+
+  df_metsc <- df_metsc %>%
+    mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
   
   # Report Info
   myReportDate <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
@@ -79,7 +88,8 @@ table1 <- df_scores %>%
               values_from = counts) %>% 
   mutate(Index_Nar = factor(Index_Nar, levels = row_ord)) %>% 
   arrange(Index_Nar) %>% 
-  rename("Index Narrative" = Index_Nar)
+  rename("Index Narrative" = Index_Nar,
+         "Low Gradient IBI" = LowGradientIBI)
 
 kable(table1)
 
@@ -91,20 +101,20 @@ library(knitr)
 library(tidyr)
 library(readxl)
 
-scores_trim <- df_scores %>% 
+scores_trim <- df_scores %>%
   select(INDEX_REGION, Index, counts)
 
-table2_temp <- scores_trim %>% 
-  group_by(INDEX_REGION) %>% 
+table2_temp <- scores_trim %>%
+  group_by(INDEX_REGION) %>%
   summarize(N = sum(counts),
             Min = round(min(Index), 1),
             q25 = round(quantile(Index, 0.25, na.rm = TRUE), 1),
             Med = round(median(Index, na.rm = TRUE), 1),
             q75 = round(quantile(Index, 0.75, na.rm = TRUE), 1),
-            Max = round(max(Index),1))%>% 
+            Max = round(max(Index),1))%>%
   rename("Index Region" = INDEX_REGION)
 
-# state directories
+#state directories
 table.dir <- "tables"
 table.file <- "Instruction_Tables.xlsx"
 IBI_tab.dir <- "IBI_data"
@@ -112,6 +122,7 @@ IBI_tab.dir <- "IBI_data"
 IBI_data <- read_excel(file.path(table.dir, table.file), sheet = IBI_tab.dir
                      , na = c("NA", ""), trim_ws = TRUE, skip = 0
                      , col_names = TRUE)
+
 table2 <- rbind(table2_temp, IBI_data)
 
 kable(table2)
@@ -126,7 +137,7 @@ library(knitr)
 # state directories
 table.dir <- "tables"
 table.file <- "Instruction_Tables.xlsx"
-tab3.dir <- "table3"
+tab3.dir <- "Back_table1"
 
 table3 <- read_excel(file.path(table.dir, table.file), sheet = tab3.dir
                      , na = c("NA", ""), trim_ws = TRUE, skip = 0
@@ -297,7 +308,7 @@ for(i in metval_cols){
   p3 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
     geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
     labs(title = title,
-         x= "Metric Units",
+         x= "Metric Values",
          y= "Frequency",
          fill= "Index Region")+
     scale_fill_manual(values=region.colors)+
@@ -367,7 +378,7 @@ for(i in metsc_cols){
   p5 <- ggplot(subset.data, aes(x = Value, fill = INDEX_REGION))+ 
     geom_histogram(alpha = 1, position = "dodge", bins = 20, color = "black")+
     labs(title = title,
-         x= "Metric Units",
+         x= "Metric Scores",
          y= "Frequency",
          fill= "Index Region")+
     scale_fill_manual(values=region.colors)+

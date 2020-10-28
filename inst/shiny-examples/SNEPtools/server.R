@@ -321,10 +321,12 @@ shinyServer(function(input, output, session) {
             df_thresh_index <- read_excel(fn_thresh, sheet="index.scoring")
 
             # run scoring code
-            df_metsc <- metric.scores(DF_Metrics = df_metval, col_MetricNames = MassMetrics,
+            df_metsc <- metric.scores(DF_Metrics = df_metval, col_MetricNames = SNEPMetrics,
                                                    col_IndexName = "INDEX_NAME", col_IndexRegion = "INDEX_REGION",
                                                    DF_Thresh_Metric = df_thresh_metric, DF_Thresh_Index = df_thresh_index,
                                                    col_ni_total = "ni_total")
+
+            df_metsc$Index <- as.numeric(df_metsc$Index)
 
 
             # Save
@@ -343,7 +345,7 @@ shinyServer(function(input, output, session) {
             Sys.sleep(0.75)
 
             # Render Summary Report (rmarkdown file)
-            rmarkdown::render(input = file.path(".", "Extras", "Summary_MA.rmd"), output_format = "word_document",
+            rmarkdown::render(input = file.path(".", "Extras", "Summary_SNEP.rmd"), output_format = "word_document",
                               output_dir = file.path(".", "Results"), output_file = "results_summary_report", quiet = TRUE)
 
             # Increment the progress bar, and update the detail text.
@@ -461,12 +463,12 @@ shinyServer(function(input, output, session) {
                                                                   ,"Site Class:", df_data$INDEX_REGION, "<br>"
                                                                   ,"Coll Date:", df_data$COLLDATE, "<br>"
                                                                   ,"Unique ID:", df_data$STATIONID, "<br>"
-                                                                  ,"Score pi_OET:", round(LG_data$SC_pi_OET,2), "<br>"
-                                                                  ,"Score pt_ffg_pred:", round(LG_data$SC_pt_ffg_pred,2), "<br>"
-                                                                  ,"Score pt_NonIns:", round(LG_data$SC_pt_NonIns,2), "<br>"
-                                                                  ,"Score pt_POET:", round(LG_data$SC_pt_POET,2), "<br>"
-                                                                  ,"Score pt_tv_toler:", round(LG_data$SC_pt_tv_toler,2), "<br>"
-                                                                  ,"Score pt_volt_semi:", round(LG_data$SC_pt_volt_semi,2), "<br>"
+                                                                  ,"Score pi_OET:", round(df_data$SC_pi_OET,2), "<br>"
+                                                                  ,"Score pt_ffg_pred:", round(df_data$SC_pt_ffg_pred,2), "<br>"
+                                                                  ,"Score pt_NonIns:", round(df_data$SC_pt_NonIns,2), "<br>"
+                                                                  ,"Score pt_POET:", round(df_data$SC_pt_POET,2), "<br>"
+                                                                  ,"Score pt_tv_toler:", round(df_data$SC_pt_tv_toler,2), "<br>"
+                                                                  ,"Score pt_volt_semi:", round(df_data$SC_pt_volt_semi,2), "<br>"
                                                                   ,"<b> Index Value:</b>", round(df_data$Index, 2), "<br>"
                                                                   ,"<b> Narrative:</b>", df_data$Index_Nar)
                          , color = "black", fillColor = ~qpal(Index), fillOpacity = 1, stroke = TRUE

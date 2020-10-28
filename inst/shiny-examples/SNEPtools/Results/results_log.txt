@@ -1,10 +1,11 @@
 Results Log from MassIBItools Shiny App
-2020-10-19 11:47:12
-file = MA_Kick_Shiny_Input_20200908.csv
+2020-10-28 16:27:05
+file = SNEP_IBI_Example_w_MA_Multihab.csv
+EXCLUDE column does not have any TRUE values. 
+  Valid values are TRUE or FALSE.  
+  Other values are not recognized.
 Warning in eval(expr, env) :
   Metrics related to the following fields are invalid:
-   SUBPHYLUM
-   SUBCLASS
    INFRAORDER
    BCG_ATTR
    LONGLIVED
@@ -12,37 +13,20 @@ Warning in eval(expr, env) :
    FFG2
    TOLVAL2
    HABITAT
-Chosen IBI from Shiny app = MassDEP_2019_Bugs
-Warning in normalizePath(path.expand(path), winslash, mustWork) :
-  path[1]="./Extras/Summary_MA.rmd": The system cannot find the file specified
-Warning: Error in abs_path: The file './Extras/Summary_MA.rmd' does not exist.
-  80: stop
-  79: abs_path
-  76: rmarkdown::render
-  72: observeEventHandler [C:\Users\Ben.Block\OneDrive - Tetra Tech, Inc\GitHub\SNEPIBITools\inst\shiny-examples\SNEPtools/server.R#183]
-   1: shiny::runApp
+Chosen IBI from Shiny app = SNEP_2020_Bugs
+Warning in sink() : no sink to remove
+Warning: `funs()` is deprecated as of dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
 
+  # Simple named list: 
+  list(mean = mean, median = median)
 
-OGR data source with driver: ESRI Shapefile 
-Source: "C:\Users\Ben.Block\OneDrive - Tetra Tech, Inc\GitHub\SNEPIBITools\inst\shiny-examples\SNEPtools\GIS_Data\BugClasses_20201001.shp", layer: "BugClasses_20201001"
-with 2 features
-It has 1 fields
-OGR data source with driver: ESRI Shapefile 
-Source: "C:\Users\Ben.Block\OneDrive - Tetra Tech, Inc\GitHub\SNEPIBITools\inst\shiny-examples\SNEPtools\GIS_Data\MA_MajBasins.shp", layer: "MA_MajBasins"
-with 258 features
-It has 6 fields
-Integer64 fields read as strings:  BAS_ID SHAPE_FID 
-OGR data source with driver: ESRI Shapefile 
-Source: "C:\Users\Ben.Block\OneDrive - Tetra Tech, Inc\GitHub\SNEPIBITools\inst\shiny-examples\SNEPtools\GIS_Data\SNEP_Bound_20201001.shp", layer: "SNEP_Bound_20201001"
-with 4 features
-It has 1 fields
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
 
-Listening on http://127.0.0.1:6615
-Server - Code runs through Line 29
-Server - Code runs through Line 68
-Server - Code runs through Line 179
-Server - Code runs through Line 29
-Server - Code runs through Line 68
-Server - Code runs through Line 179
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+[90mThis warning is displayed once every 8 hours.[39m
+[90mCall `lifecycle::last_warnings()` to see where this warning was generated.[39m
 
 
