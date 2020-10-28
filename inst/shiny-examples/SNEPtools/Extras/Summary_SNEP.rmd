@@ -239,7 +239,7 @@ col_metscore <- c("SC_pi_OET"
                    ,"SC_pt_tv_toler"
                    ,"SC_pt_volt_semi")
 
-col_metnames <- c("% Odon., Ephem., Trich. individuals"
+col_metnames <- c("% Odon., Ephem., Trich. indivs"
                   , "% Predator taxa"
                   , "% non-insect taxa"
                   , "% Plec., Odon., Ephem., Trich. indivs"

@@ -1,6 +1,6 @@
 ---
 title: "Instructions and Background Information"
-date: "2020-10-19 11:51:29"
+date: "2020-10-28 12:56:49"
 output:
   md_document:
     toc: yes
@@ -10,73 +10,24 @@ output:
 
 # Instructions
 
-MassIBItools is a product developed by Tetra Tech, Inc. designed for the Massachusetts Department of Environmental Protection (MassDEP) to use in calculation of benthic macroinvertebrate metrics and index values for Massachusetts streams using Indices of Biotic Integrity (IBI). For more information, see the Background section.
+SNEPIBItools  was developed to calculate benthic macroinvertebrate metrics and the Index of Biotic Integrity (IBI) for low gradient, slow-moving, wadeable, freshwater, non-tidal streams in Rhode Island and Massachusetts. Detailed documentation of IBI development can be downloaded here. Users can run any data through the IBI calculator and get a result. However, if samples do not meet the criteria listed on the Background page, results should be interpreted with caution.
 
-R is an open source programming language and software environment for statistical computing.
+The Instructions are divided into three sections: 1) preparing the input file; 2) app operation; and 3) frequently asked questions (FAQ). Links to an example input file and a document containing more detailed information on preparing the input file are also provided.
 
-Shiny by RStudio, is an interactive web application that serves as a graphical user interface for MassIBItools.
+This app was developed by Ben Block from Tetra Tech, Inc. (Ben.Block@tetratech.com), with underlying R code written by Ben Block and Erik Leppo (Erik.Leppo@tetratech.com). Please contact Ben Block should any issues or questions arise.
 
-Shiny application developed by Ben Block (Ben.Block@tetratech.com).
-R code written by Ben Block and Erik Leppo (Erik.Leppo@tetratech.com).
 
 ## Foreword
-The MassIBItools shiny app was produced by Tetra Tech, Inc. to provide Mass DEP a tool to calculate IBI index scores for any future sampling efforts. The app is streamline and easy to operate, and only requires an input dataset to function. Index scores are calculated based on user inputs which have the potential to produce incorrect results. Therefore, the first portion of the user manual provides detailed instructions on how to properly format the input file. The next section discusses app operation. Finally, a frequently asked questions (FAQ) section may provide beneficial answers to frequently asked questions. Feel free to contact Ben Block should any issues or questions arise. 
+Tetra Tech, Inc. developed the SNEPIBItools shiny app for the Southeast New England Coastal Watershed Restoration Program (SNEP). The work was done in partnership with the Rhode Island Department of Environmental Management (RI DEM), Massachusetts Department of Environmental Protection (Mass DEP) and the New England Interstate Water Pollution Control Commission (NEIWPCC). This tool allows SNEP and their partners to calculate IBI scores for benthic macroinvertebrate samples, which will improve their ability to identify degradation in biological integrity and water quality in low gradient streams in the Southeast New England region. The app is streamlined and easy to operate, and only requires an input dataset to function. Shiny apps are interactive web applications that serve as graphical user interfaces. They are linked to R, which is an open source programming language and software environment for statistical computing.
 
 ## Input data set
-### Required Columns
-MassIBItools requires an input dataset to be properly formatted and contain the appropriate information. Columns required include: 
-
-* INDEX_NAME
-* SAMPLEID
-* INDEX_REGION
-* LAT
-* LONG
-* STATIONID
-* COLLDATE
-* COLLMETH
-* TAXAID
-* N_TAXA
-* EXCLUDE
-* NONTARGET
-* PHYLUM
-* SUBPHYLUM
-* CLASS
-* ORDER
-* FAMILY
-* SUBFAMILY
-* TRIBE
-* GENUS
-* FFG
-* TOLVAL
-* HABIT
-* THERMAL_INDICATOR
-* LIFE_CYCLE
-
-The app will notify the user if the input dataset is missing columns. Note, column headers need to be capitalized and spelled exactly as shown. 
-
-### Input data format   
-The input dataset needs to be in “long” format which means that columns are reduced, and each row is assigned an observation. The input dataset for MassIBItools should have one row for every SAMPLEID and observed TAXAID. Duplicate, replicate, or revisit samples must have the information coded in to the SAMPLEID. TAXAID should never include life stage designations because metrics are calculated based on taxonomy only. Index scores will likely be incorrect if life stage designations are included. For example, Haliplidae_larvae and Haliplidae_adult would be considered as two separate taxa by the app and would be reflected in index scores. For this example, each sample should include only one entry for Haliplidae. Certain columns require specific inputs (Table 1).
-
-### Table 1. Input options for select columns. Any other input will result in an error. Note, Input Options are case-specific; some include underscores. 
-
-|Input Column Name |Input Options                         |Comments                                                                                                                                                                    |
-|:-----------------|:-------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|INDEX_NAME        |MassDEP_2019_Bugs                     |NA                                                                                                                                                                          |
-|INDEX_REGION      |CENTRALHILLS, WESTHIGHLANDS, MULTIHAB |Describing the Site Class                                                                                                                                                   |
-|EXCLUDE           |TRUE/FALSE                            |“TRUE” if the taxon is also represented by another taxon at a more refined taxonomic level in the same sample; otherwise “FALSE”                                            |
-|NONTARGET         |TRUE/FALSE                            |“TRUE” if the record was intended and valid for index calculation. “FALSE” if the record is not valid (e.g., terrestrial organism or counted after the official subsample). |
-|FFG               |CF, CG, PR, SC, SH                    |Representing collector-filterer, collector-gatherer, predator, scraper, and shredder, respectively. Input NA for missing data.                                              |
-|HABIT             |BU, CB, CN, SK, SP, SW                |Representing burrower, climber, clinger, skater, sprawler, and swimmer, respectively. Input NA for missing data.                                                            |
-|TAXAID            |<text describing taxa>                |These are not required to match any external lists, though matching might have been used to associate taxa with traits for the input file                                   |
-|N_TAXA            |<non-negative integer>                |This represents the count of individuals observed in the sample.                                                                                                            |
-|LIFE_CYCLE        |uni, semi, multi                      |Representing in the voltanism attirbute for an invertebrate.                                                                                                                |
 
 ## App Instructions
 
 Once open, the user will see the IBI calculator interface. The user should follow the onscreen instructions as follows:
 
 1. Load file
-    + An example input file can be downloaded from Github [EXAMPLE LINK](https://github.com/Blocktt/MassIBItools/tree/master/inst/shiny-examples/MassIBItools/Examples)
+    + An example input file can be downloaded from Github [EXAMPLE LINK](https://github.com/Blocktt/SNEPtools/tree/main/inst/shiny-examples/MassIBItools/Examples)
     + Choose Separator. The separator indicates how the data is stored. Comma indicates the input file is a comma-separated file (.csv). Tab indicates the input file is a tab-separated file (.txt or .tsv). Finally, Semicolon indicates the input file is a semicolon-separated file which is uncommon in the United States but common in Western-European countries. Be certain that the designated separator is not used in any of the text fields (e.g., for multiple FFG, separate with a semicolon).
     + Choose Quote. The quote indicates how the data is stored. Double quote is the most common.
     + Choose file to upload. Hit the browse button and search for the input file. 
@@ -96,7 +47,7 @@ Once open, the user will see the IBI calculator interface. The user should follo
     + Sites are color coded by their Index Score value - click on a site for more info.
     + The map can be filtered based on INDEX_REGION using the checkbox group in the upper right. 
 
-### Frequently asked questions and troubleshooting
+## Frequently asked questions and troubleshooting
 
 1. Why am I getting an error saying that I am missing columns even when I am not?
     + You may have incorrectly spelled a given column. Try writing the column in all capital letters. Also, some columns (e.g., INDEX_REGION) require an underscore to separate the two words.

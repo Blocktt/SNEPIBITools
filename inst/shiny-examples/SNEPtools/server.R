@@ -101,7 +101,6 @@ shinyServer(function(input, output, session) {
                               ,"EXCLUDE"
                               ,"NONTARGET"
                               ,"PHYLUM"
-                              ,"SUBPHYLUM"
                               ,"CLASS"
                               ,"SUBCLASS"
                               ,"ORDER"
@@ -111,7 +110,6 @@ shinyServer(function(input, output, session) {
                               ,"GENUS"
                               ,"FFG"
                               ,"TOLVAL"
-                              ,"HABIT"
                               ,"LIFE_CYCLE")
 
         column_names <- colnames(df_input)
@@ -287,7 +285,7 @@ shinyServer(function(input, output, session) {
              #                                              fun.MetricNames = MassMetrics, fun.cols2keep=keep_cols, boo.Shiny = TRUE))
 
             df_metval <- suppressWarnings(metric.values(fun.DF = df_data, fun.Community = "bugs",
-                                                           fun.MetricNames = MassMetrics, fun.cols2keep=keep_cols, boo.Shiny = TRUE))
+                                                           fun.MetricNames = SNEPMetrics, fun.cols2keep=keep_cols, boo.Shiny = TRUE))
 
 
             # Increment the progress bar, and update the detail text.
@@ -430,12 +428,6 @@ shinyServer(function(input, output, session) {
 
       # subset data by Index_Region
 
-      WH_data <- df_data %>%
-        filter(INDEX_REGION == "WESTHIGHLANDS")
-
-      CH_data <- df_data %>%
-        filter(INDEX_REGION == "CENTRALHILLS")
-
       leaflet() %>%
         addTiles() %>%
         addProviderTiles("CartoDB.Positron", group="Positron") %>%
@@ -464,47 +456,30 @@ shinyServer(function(input, output, session) {
                     , group = "SNEP Region"
 
         ) %>%
-        addCircleMarkers(data = WH_data, lat = ~LAT, lng = ~LONG
-                         , group = "WESTHIGHLANDS", popup = paste("SampleID:", WH_data$SAMPLEID, "<br>"
-                                                                  ,"Site Class:", WH_data$INDEX_REGION, "<br>"
-                                                                  ,"Coll Date:", WH_data$COLLDATE, "<br>"
-                                                                  ,"Unique ID:", WH_data$STATIONID, "<br>"
-                                                                  ,"Score nt_total:", round(WH_data$SC_nt_total,2), "<br>"
-                                                                  ,"Score pi_Pleco:", round(WH_data$SC_pi_Pleco,2), "<br>"
-                                                                  ,"Score pi_ffg_filt:", round(WH_data$SC_pi_ffg_filt,2), "<br>"
-                                                                  ,"Score pi_ffg_shred:", round(WH_data$SC_pi_ffg_shred,2), "<br>"
-                                                                  ,"Score pi_tv_intol:", round(WH_data$SC_pi_tv_intol,2), "<br>"
-                                                                  ,"Score x_Becks:", round(WH_data$SC_x_Becks,2), "<br>"
-                                                                  ,"<b> Index Value:</b>", round(WH_data$Index, 2), "<br>"
-                                                                  ,"<b> Narrative:</b>", WH_data$Index_Nar)
+        addCircleMarkers(data = df_data, lat = ~LAT, lng = ~LONG
+                         , group = "SNEP Sites", popup = paste("SampleID:", df_data$SAMPLEID, "<br>"
+                                                                  ,"Site Class:", df_data$INDEX_REGION, "<br>"
+                                                                  ,"Coll Date:", df_data$COLLDATE, "<br>"
+                                                                  ,"Unique ID:", df_data$STATIONID, "<br>"
+                                                                  ,"Score pi_OET:", round(LG_data$SC_pi_OET,2), "<br>"
+                                                                  ,"Score pt_ffg_pred:", round(LG_data$SC_pt_ffg_pred,2), "<br>"
+                                                                  ,"Score pt_NonIns:", round(LG_data$SC_pt_NonIns,2), "<br>"
+                                                                  ,"Score pt_POET:", round(LG_data$SC_pt_POET,2), "<br>"
+                                                                  ,"Score pt_tv_toler:", round(LG_data$SC_pt_tv_toler,2), "<br>"
+                                                                  ,"Score pt_volt_semi:", round(LG_data$SC_pt_volt_semi,2), "<br>"
+                                                                  ,"<b> Index Value:</b>", round(df_data$Index, 2), "<br>"
+                                                                  ,"<b> Narrative:</b>", df_data$Index_Nar)
                          , color = "black", fillColor = ~qpal(Index), fillOpacity = 1, stroke = TRUE
                          , clusterOptions = markerClusterOptions()
 
         ) %>%
 
-        addCircleMarkers(data = CH_data, lat = ~LAT, lng = ~LONG
-                         , group = "CENTRALHILLS", popup = paste("SampleID:", CH_data$SAMPLEID, "<br>"
-                                                                 ,"Site Class:", CH_data$INDEX_REGION, "<br>"
-                                                                 ,"Coll Date:", CH_data$COLLDATE, "<br>"
-                                                                 ,"Unique ID:", CH_data$STATIONID, "<br>"
-                                                                 ,"Score nt_total:", round(CH_data$SC_nt_total,2), "<br>"
-                                                                 ,"Score pt_EPT:", round(CH_data$SC_pt_EPT,2), "<br>"
-                                                                 ,"Score pi_EphemNoCaeBae:", round(CH_data$SC_pi_EphemNoCaeBae,2), "<br>"
-                                                                 ,"Score pi_ffg_filt:", round(CH_data$SC_pi_ffg_filt,2), "<br>"
-                                                                 ,"Score pt_ffg_pred:", round(CH_data$SC_pt_ffg_pred,2), "<br>"
-                                                                 ,"Score pt_tv_intol:", round(CH_data$SC_pt_tv_intol,2), "<br>"
-                                                                 ,"<b> Index Value:</b>", round(CH_data$Index, 2), "<br>"
-                                                                 ,"<b> Narrative:</b>", CH_data$Index_Nar)
-                         , color = "black", fillColor = ~qpal(Index), fillOpacity = 1, stroke = TRUE
-                         , clusterOptions = markerClusterOptions()
-
-        )%>%
         addLegend(pal = qpal,
                   values = scale_range,
                   position = "bottomright",
                   title = "Index Scores",
                   opacity = 1) %>%
-        addLayersControl(overlayGroups = c("WESTHIGHLANDS", "CENTRALHILLS", "MA Regions", "SNEP Region" ,"Major Basins"),
+        addLayersControl(overlayGroups = c("SNEP Sites", "MA Regions", "SNEP Region" ,"Major Basins"),
                          baseGroups = c("OSM (default)", "Positron", "Toner Lite"),
                          options = layersControlOptions(collapsed = TRUE))%>%
         hideGroup(c("MA Regions", "SNEP Region" , "Major Basins")) %>%
@@ -579,29 +554,21 @@ shinyServer(function(input, output, session) {
 
       # shape palette
       shape_pal <- c("Index" = 16
-                     , "nt_total" = 15
-                     , "pt_EPT" = 15
-                     , "pi_EphemNoCaeBae" = 15
-                     , "pi_ffg_filt" = 15
+                     , "pi_OET" = 15
                      , "pt_ffg_pred" = 15
-                     , "pt_tv_intol" = 15
-                     , "pi_Pleco" = 15
-                     , "pi_ffg_shred" = 15
-                     , "pi_tv_intol" = 15
-                     , "x_Becks" = 15)
+                     , "pt_NonIns" = 15
+                     , "pt_POET" = 15
+                     , "pt_tv_toler" = 15
+                     , "pt_volt_semi" = 15)
 
       # size palette
       size_pal <- c("Index" = 10
-                    , "nt_total" = 5
-                    , "pt_EPT" = 5
-                    , "pi_EphemNoCaeBae" = 5
-                    , "pi_ffg_filt" = 5
+                    , "pi_OET" = 5
                     , "pt_ffg_pred" = 5
-                    , "pt_tv_intol" = 5
-                    , "pi_Pleco" = 5
-                    , "pi_ffg_shred" = 5
-                    , "pi_tv_intol" = 5
-                    , "x_Becks" = 5)
+                    , "pt_NonIns" = 5
+                    , "pt_POET" = 5
+                    , "pt_tv_toler" = 5
+                    , "pt_volt_semi" = 5)
 
       ggplot(df_grph_input, aes(x=Variable, y = Score, shape = Variable))+
         geom_point(aes(size = Variable))+

@@ -33,18 +33,12 @@ options(shiny.maxRequestSize = 25*1024^2)
 
 # define which metrics michigan wants to keep in indices
 
-MassMetrics <- c("nt_total"
-                 ,"pt_EPT"
-                 ,"pi_EphemNoCaeBae"
-                 ,"pi_ffg_filt"
+SNEPMetrics <- c("pi_OET"
                  ,"pt_ffg_pred"
-                 ,"pt_tv_intol"
-                 ,"pi_Pleco"
-                 ,"pi_ffg_shred"
-                 ,"pi_tv_intol"
-                 ,"x_Becks"
-
-)# END MassMetricss
+                 ,"pt_NonIns"
+                 ,"pt_POET"
+                 ,"pt_tv_toler"
+                 ,"pt_volt_semi")# END SNEPMetrics
 
 
 #### GIS/Map data ####
