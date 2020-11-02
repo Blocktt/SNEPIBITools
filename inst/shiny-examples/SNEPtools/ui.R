@@ -14,18 +14,20 @@ sapply(fn_html, knit, quiet = T)
 
 
 # Define UI
-shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.0.900",
+shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.2.900",
                    tabPanel("Background",
 
                             img(src = "logo.png", height = 120, width = 200),
-                            withMathJax(includeMarkdown("App_Background.md")),
-                            img(src = "figure1_alt.png", height = 600, width = 750)
+                            # withMathJax(includeMarkdown("App_Background.md")),
+                            # HTML(paste('<br/>')),
+                            includeHTML("App_Background.html"),
+                            img(src = "figure1_alt.png", height = 520, width = 650)
 
                    ), #tabPanel ~END
                    tabPanel("Instructions",
 
                             img(src = "logo.png", height = 120, width = 200),
-                            withMathJax(includeMarkdown("App_Instructions.md"))
+                            includeHTML("App_Instructions.html")
 
                    ), #tabPanel ~END
                    tabPanel("Calculator",

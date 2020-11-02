@@ -24,8 +24,6 @@ The SNEP IBI is intended to be applied to samples collected from low gradient, s
 
 If you apply the IBIs to samples that do not meet the criteria listed above, results should be interpreted with caution.
 
-
-
 ### Table 1. Metrics and scoring formulae for the SNEP low gradient IBI (300-count). 
 ```{r table_1}
 library(readxl)

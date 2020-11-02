@@ -43,12 +43,6 @@ library(dplyr)
   # df_metval <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/SNEP_results_metval.csv")
   # df_metsc <- read.csv("C:/Users/Ben.Block/OneDrive - Tetra Tech, Inc/GitHub/SNEP_results_metsc.csv")
   
-  df_metval <- df_metval %>%
-    mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
-
-  df_metsc <- df_metsc %>%
-    mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
-  
   # Report Info
   myReportDate <- format(Sys.time(), '%Y-%m-%d %H:%M:%S')
   cat(paste("**Report Date:** " ,myReportDate, "\n\n", sep=""))
@@ -253,7 +247,7 @@ col_metscore <- c("SC_pi_OET"
 col_metnames <- c("% Odon., Ephem., Trich. indivs"
                   , "% Predator taxa"
                   , "% non-insect taxa"
-                  , "% Plec., Odon., Ephem., Trich. indivs"
+                  , "% Plec., Odon., Ephem., Trich. taxa"
                   , "% tolerant taxa"
                   , "% semivoltine taxa")
 

@@ -287,6 +287,8 @@ shinyServer(function(input, output, session) {
             df_metval <- suppressWarnings(metric.values(fun.DF = df_data, fun.Community = "bugs",
                                                            fun.MetricNames = SNEPMetrics, fun.cols2keep=keep_cols, boo.Shiny = TRUE))
 
+            df_metval <- df_metval %>%
+              mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
 
             # Increment the progress bar, and update the detail text.
             incProgress(1/n_inc, detail = "Metrics have been calculated!")
@@ -328,6 +330,8 @@ shinyServer(function(input, output, session) {
 
             df_metsc$Index <- as.numeric(df_metsc$Index)
 
+            df_metsc <- df_metsc %>%
+              mutate(INDEX_REGION = replace(INDEX_REGION, INDEX_REGION == "LOWGRADIENTIBI", "LowGradientIBI"))
 
             # Save
             # fn_metsc <- file.path(".", "Results", "results_metsc.tsv")
