@@ -19,7 +19,7 @@ releases](https://img.shields.io/github/downloads/Blocktt/SNEPtools/total)](http
 ``` r
 library(devtools)  #install if needed
 Sys.setenv("TAR" = "internal")  # needed for R v3.6.0
-install_github("Blocktt/MassIBItools", force=TRUE, build_vignettes=TRUE)
+install_github("Blocktt/SNEPtools", force=TRUE, build_vignettes=TRUE)
 ```
 
 ## Purpose
