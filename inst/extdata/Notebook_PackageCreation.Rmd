@@ -1,5 +1,5 @@
 ---
-title: "Notebook, MassIBItools"
+title: "Notebook, SNEPtools"
 output: html_notebook
 editor_options: 
   chunk_output_type: inline
@@ -23,7 +23,7 @@ file.remove("NEWS.html")
 #file.remove("NEWS.md")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Library Name
-myPkg <- "MassIBItools"
+myPkg <- "SNEPIBItools"
 # Load Library
 library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,6 +43,7 @@ devtools::document()
 setwd("..") # return to root directory first
 devtools::install(myPkg, quick=FALSE, reload=TRUE, build_vignettes = TRUE)
 
+myPkg <- "SNEPtools"
 # blank row above allows for the code to continue instead of waiting for user response to pkg updates.
 ## Reload library
 library(myPkg, character.only = TRUE)

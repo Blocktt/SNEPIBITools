@@ -2,7 +2,7 @@
 title: "Background Information"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output:
-  md_document:
+  html_fragment:
     toc: yes
 ---
 
@@ -17,7 +17,7 @@ if(boo_DEBUG==TRUE){
 ```
 
 # Background
-An Index of Biotic Integrity (IBI) was developed for macroinvertebrate assemblages in low gradient, freshwater streams in the Southeast New England region, which includes coastal areas in Massachusetts and Rhode Island (Figure 1). A report detailing the development of the IBI can be found here . The work was funded by the Southeast New England Coastal Watershed Restoration Program (SNEP) and was done in partnership with the Rhode Island Department of Environmental Management (RI DEM), Massachusetts Department of Environmental Protection (Mass DEP) and the New England Interstate Water Pollution Control Commission (NEIWPCC).
+An Index of Biotic Integrity (IBI) was developed for macroinvertebrate assemblages in low gradient, freshwater streams in the Southeast New England region, which includes coastal areas in Massachusetts and Rhode Island (Figure 1). A report detailing the development of the IBI can be found [here](https://github.com/Blocktt/SNEPtools/tree/main/reports). The work was funded by the Southeast New England Coastal Watershed Restoration Program (SNEP) and was done in partnership with the Rhode Island Department of Environmental Management (RI DEM), Massachusetts Department of Environmental Protection (Mass DEP) and the New England Interstate Water Pollution Control Commission (NEIWPCC).
 
 ## Intended application
 The SNEP IBI is intended to be applied to samples collected from low gradient, slow-moving, wadeable, freshwater, non-tidal streams in Rhode Island and Massachusetts, using MassDEP or SNEP multihabitat sampling methods. Samples are collected between July 1–September 30, using a net with 500 μm mesh. Ten kicks, sweeps, and/or jabs are taken over a 100-m reach and then composited into a single sample. Organisms are collected from the following habitats (in proportion to their occurrence): submerged wood, submerged vegetation, undercut banks/overhanging vegetation, and hard bottom/rocky substrates. Taxa identifications are done to the lowest practical level in the laboratory. The SNEP IBI was calibrated with 300-count samples. It can also be applied to 200 or 100-count samples, but 300 are recommended. 
@@ -28,6 +28,7 @@ If you apply the IBIs to samples that do not meet the criteria listed above, res
 ```{r table_1}
 library(readxl)
 library(knitr)
+library(kableExtra)
 # state directories
 table.dir <- "tables"
 table.file <- "Instruction_Tables.xlsx"
@@ -37,5 +38,7 @@ table1 <- read_excel(file.path(table.dir, table.file), sheet = tab1.dir
                      , na = c("NA", ""), trim_ws = TRUE, skip = 0
                      , col_names = TRUE)  
 
-kable(table1)
+table1 %>%
+  kable() %>%
+  kable_styling(full_width = F, position = "left")
 ```
