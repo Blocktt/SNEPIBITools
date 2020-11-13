@@ -7,9 +7,9 @@
 #    http://shiny.rstudio.com/
 #
 
-# test for rendering markdown
-fn_html <- file.path(".", "Extras", "App_Instructions.rmd")
-sapply(fn_html, knit, quiet = T)
+# # test for rendering markdown
+# fn_html <- file.path(".", "Extras", "App_Instructions.rmd")
+# sapply(fn_html, knit, quiet = T)
 
 
 
