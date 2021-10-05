@@ -628,4 +628,23 @@ shinyServer(function(input, output, session) {
 
     }) ## renderPlot ~ END
 
+    # StoryMaps ####
+
+    ## Technical ####
+    #https://stackoverflow.com/questions/33020558/embed-iframe-inside-shiny-app
+    #https://stackoverflow.com/questions/59628035/r-shiny-how-to-fill-out-the-entire-space-of-the-browser-window-with-an-iframe
+    output$StoryMap_Tech <- renderUI({
+      Technical <- paste0("https://storymaps.arcgis.com/stories/f8d9ce1ca4a24bcda99c1b780ae85179")
+      # my_test <- tags$iframe(src=test, height=800, width=1535)
+      my_Technical <- tags$iframe(src=Technical, style='width:90vw;height:90vh;')
+      my_Technical
+    })## renderUI ~ END
+
+    output$StoryMap_NonTech <- renderUI({
+      NonTechnical <- paste0("https://storymaps.arcgis.com/stories/a70626f4c03e425ea9b3eecc5098f54b")
+      # my_test <- tags$iframe(src=test, height=800, width=1535)
+      my_NonTechnical <- tags$iframe(src=NonTechnical, style='width:90vw;height:90vh;')
+      my_NonTechnical
+    })## renderUI ~ END
+
 })##shinyServer~END

@@ -14,7 +14,7 @@
 
 
 # Define UI
-shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.2.900",
+shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.3.900",
                    tabPanel("Background",
 
                             img(src = "logo.png", height = 120, width = 200),
@@ -131,6 +131,18 @@ shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.
 
                        )##mainPanel.END
                      )#sidebarLayout.End
-            )## tabPanel~END
+            ), ## tabPanel~END
+            navbarMenu("StoryMaps"
+                       ,tabPanel("Technical StoryMap"
+                                 , h3("An ArcGIS StoryMap that summarizes the technical work done to create the SNEP low-gradient IBI.")
+                                 , h3(tags$a(href= "https://storymaps.arcgis.com/stories/f8d9ce1ca4a24bcda99c1b780ae85179", "Direct Link"))
+                                 , htmlOutput("StoryMap_Tech")
+                       ) #tabPanel ~END
+                       ,tabPanel("Non-Technical StoryMap"
+                                 , h3("An ArcGIS StoryMap for non-technical audiences that explains biomonitoring and IBIs.")
+                                 , h3(tags$a(href= "https://storymaps.arcgis.com/stories/a70626f4c03e425ea9b3eecc5098f54b", "Direct Link"))
+                                 , htmlOutput("StoryMap_NonTech")
+                       ) #tabPanel ~END
+                       )## navbarMenu~End
           )## navbarPage~END
 )## shinyUI~END

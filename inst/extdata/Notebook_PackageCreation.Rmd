@@ -23,7 +23,7 @@ file.remove("NEWS.html")
 #file.remove("NEWS.md")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Library Name
-myPkg <- "SNEPIBItools"
+myPkg <- "SNEPtools"
 # Load Library
 library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
