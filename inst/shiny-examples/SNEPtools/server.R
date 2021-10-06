@@ -26,6 +26,8 @@
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
 
+  # bs_themer()
+
   message("Server - Code runs through Line 29")
 
     # map and plots require df_metsc

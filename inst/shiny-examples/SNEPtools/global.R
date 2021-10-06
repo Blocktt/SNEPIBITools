@@ -19,6 +19,7 @@ library(shinyjs) # used for download button enable
 library(mapview) # used to download leaflet map
 library(stringr)
 library(shinythemes)
+library(bslib)
 
 
 # Drop-down boxes

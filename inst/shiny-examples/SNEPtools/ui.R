@@ -7,14 +7,20 @@
 #    http://shiny.rstudio.com/
 #
 
-# # test for rendering markdown
-# fn_html <- file.path(".", "Extras", "App_Instructions.rmd")
-# sapply(fn_html, knit, quiet = T)
-
-
+#theme = bs_theme(bootswatch = "minty"
+# ,"navbar-bg" = "#acccb4"
+# ,"form-check-radio-checked-bg" = "#34843c")
 
 # Define UI
-shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.1.3.900",
+shinyUI(navbarPage(theme = bs_theme(bootswatch = "minty"
+                                    ,primary = "#0b5394"
+                                    ,secondary = "#79aa7b"
+                                    ,"navbar-bg" = "#acccb4"
+                                    ,"form-check-radio-checked-bg" = "#34843c")
+                   , "SNEP Stream IBI Calculator v0.1.3.900",
+                   # Themes from bslib package
+                   #https://rstudio.github.io/bslib/articles/bslib.html
+                   #https://rstudio.github.io/bslib/articles/bs5-variables.html#form-check-radio-checked-bg-image
                    tabPanel("Background",
 
                             img(src = "logo.png", height = 120, width = 200),
@@ -40,8 +46,8 @@ shinyUI(navbarPage(theme = shinytheme("united"), "SNEP Stream IBI Calculator v0.
                                     #, p("1_LoadData, 2_CalcMetrics, 3_CalcIndex, 4_DownloadResults")
                                     , h4("1. Load File")
                                     , h5("Select file parameters")
-                                    , radioButtons('sep', 'Separator',
-                                                   c(Comma=',',
+                                    , radioButtons('sep', 'Separator'
+                                                   ,c(Comma=',',
                                                      Semicolon=';',
                                                      Tab='\t'),
                                                    ',')
