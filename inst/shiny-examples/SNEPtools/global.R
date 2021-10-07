@@ -20,6 +20,7 @@ library(mapview) # used to download leaflet map
 library(stringr)
 library(shinythemes)
 library(bslib)
+library(capture)
 
 
 # Drop-down boxes
