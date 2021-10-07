@@ -22,10 +22,6 @@ tab_StoryMaps <- source("external/tab_StoryMaps.R", local = TRUE)$value
 #https://rstudio.github.io/bslib/articles/bslib.html
 #https://rstudio.github.io/bslib/articles/bs5-variables.html#form-check-radio-checked-bg-image
 #https://bootswatch.com/minty/
-# theme = bs_theme(primary = "#0b5394"
-#                  ,secondary = "#79aa7b"
-#                  ,"navbar-bg" = "#acccb4"
-#                  ,"table-active-bg" = "#fe9929")
 
 
 # Define UI
