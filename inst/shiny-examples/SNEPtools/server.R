@@ -7,39 +7,19 @@
 #    http://shiny.rstudio.com/
 #
 
-# Packages
-# library(shiny)
-# library(DT)
-# library(ggplot2)
-# library(readxl)
-# library(reshape2)
-# library(dplyr)
-# library(utils)
-# library(BioMonTools)
-# library(knitr)
-# library(maps)
-# library(rmarkdown)
-# library(tidyr)
-# # library(plotly)
-# library(shinyjs) # used for download button enable
-
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-
-  # bs_themer()
+  # Setup ####
 
     # map and plots require df_metsc
     map_data <- reactiveValues(df_metsc = NULL)
 
-    ##############################
-    ###### Insturctions Page #####
-    ##############################
 
-    # Misc Names ####
+    ## Misc Names ####
     output$fn_input_display <- renderText({input$fn_input}) ## renderText~END
 
 
-    # df_import ####
+    ## df_import ####
     output$df_import_DT <- renderDT({
         # input$df_import will be NULL initially. After the user selects
         # and uploads a file, it will be a data frame with 'name',
@@ -59,7 +39,8 @@ shinyServer(function(input, output, session) {
 
         # Read user imported file
         df_input <- read.csv(inFile$datapath, header = TRUE,
-                             sep = input$sep, quote = input$quote, stringsAsFactors = FALSE)
+                             sep = input$sep, quote = input$quote
+                             , stringsAsFactors = FALSE)
 
         required_columns <- c("INDEX_NAME"
                               ,"STATIONID"
@@ -92,9 +73,10 @@ shinyServer(function(input, output, session) {
         col_missing <- required_columns[!col_req_match]
 
         shiny::validate(
-            need(all(required_columns %in% column_names), paste0("Error\nChoose correct data separator; otherwise, you may have missing required columns\n",
-                                                                 paste("Required columns missing from the data:\n")
-                                                                 , paste("* ", col_missing, collapse = "\n")))
+            need(all(required_columns %in% column_names)
+                 , paste0("Error\nChoose correct data separator; otherwise, you may have missing required columns\n"
+                          , paste("Required columns missing from the data:\n")
+                          , paste("* ", col_missing, collapse = "\n")))
         )##END ~ validate() code
 
         ########################### MAP and PLOT Observer
@@ -108,7 +90,7 @@ shinyServer(function(input, output, session) {
         }) ## observe~END
 
 
-        ##############
+        ## Build results ####
 
         # Add "Results" folder if missing
         boo_Results <- dir.exists(file.path(".", "Results"))
@@ -133,26 +115,26 @@ shinyServer(function(input, output, session) {
     , filter="top", options=list(scrollX=TRUE)
     )##output$df_import_DT~END
 
-    # b_Calc ####
+    # Calculate IBI ####
     # Calculate IBI (metrics and scores) from df_import
-    # add "sleep" so progress bar is readable
+
     observeEvent(input$b_Calc, {
         shiny::withProgress({
             #
             # Number of increments
             n_inc <- 7
 
-            # sink output
+            ## Sink output ####
             #fn_sink <- file.path(".", "Results", "results_log.txt")
             file_sink <- file(file.path(".", "Results", "results_log.txt"), open = "wt")
             sink(file_sink, type = "output", append = TRUE)
             sink(file_sink, type = "message", append = TRUE)
+
             # Log
             message("Results Log from MassIBItools Shiny App")
             message(Sys.time())
             inFile <- input$fn_input
             message(paste0("file = ", inFile$name))
-
 
             # Increment the progress bar, and update the detail text.
             incProgress(1/n_inc, detail = "Data, Initialize")
@@ -163,6 +145,8 @@ shinyServer(function(input, output, session) {
             df_data <- NULL  # set as null for IF QC check prior to import
             fn_input <- file.path(".", "Results", "data_import.tsv")
             df_data <- read.delim(fn_input, stringsAsFactors = FALSE, sep="\t")
+
+            # Quality control ####
 
             # QC, FAIL if TRUE
             if (is.null(df_data)){
@@ -205,13 +189,11 @@ shinyServer(function(input, output, session) {
                 message("NONTARGET column does not have any FALSE values. \n  Valid values are TRUE or FALSE.  \n  Other values are not recognized.")
             }##IF.Exclude.T.END
 
-
-            #appUser <- Sys.getenv('USERNAME')
-            # Not meaningful when run online via Shiny.io
-
             # Increment the progress bar, and update the detail text.
             incProgress(1/n_inc, detail = "Calculate, Metrics (takes ~ 30-45s)")
             Sys.sleep(0.5)
+
+            # Data Prep ####
 
             # prior to metric calculation, we need to add columns that aren't part of the dataset but need to be in the input dataframe
             # otherwise, metric.values.MI () will produce an error when on shinyapps.io (dated 2020-07-30)
@@ -238,7 +220,7 @@ shinyServer(function(input, output, session) {
             # columns to keep
             keep_cols <- c("Lat", "Long", "STATIONID", "COLLDATE", "COLLMETH")
 
-            # metric calculation
+            # Metric calculation ####
             df_metval <- suppressWarnings(metric.values(fun.DF = df_data, fun.Community = "bugs",
                                                            fun.MetricNames = SNEPMetrics, fun.cols2keep=keep_cols, boo.Shiny = TRUE))
 
@@ -255,8 +237,6 @@ shinyServer(function(input, output, session) {
 
             #
             # Save
-            # fn_metval <- file.path(".", "Results", "results_metval.tsv")
-            # write.table(df_metval, fn_metval, row.names = FALSE, col.names = TRUE, sep="\t")
             fn_metval <- file.path(".", "Results", "results_metval.csv")
             write.csv(df_metval, fn_metval, row.names = FALSE)
             #
@@ -267,7 +247,7 @@ shinyServer(function(input, output, session) {
             incProgress(1/n_inc, detail = "Calculate, Scores")
             Sys.sleep(0.50)
 
-            # Metric Scores
+            # Metric Scores ####
 
             # Thresholds
             fn_thresh <- file.path(system.file(package="BioMonTools"), "extdata", "MetricScoring.xlsx")
@@ -275,10 +255,13 @@ shinyServer(function(input, output, session) {
             df_thresh_index <- read_excel(fn_thresh, sheet="index.scoring")
 
             # run scoring code
-            df_metsc <- metric.scores(DF_Metrics = df_metval, col_MetricNames = SNEPMetrics,
-                                                   col_IndexName = "INDEX_NAME", col_IndexRegion = "INDEX_REGION",
-                                                   DF_Thresh_Metric = df_thresh_metric, DF_Thresh_Index = df_thresh_index,
-                                                   col_ni_total = "ni_total")
+            df_metsc <- metric.scores(DF_Metrics = df_metval
+                                      , col_MetricNames = SNEPMetrics
+                                      , col_IndexName = "INDEX_NAME"
+                                      , col_IndexRegion = "INDEX_REGION"
+                                      , DF_Thresh_Metric = df_thresh_metric
+                                      , DF_Thresh_Index = df_thresh_index
+                                      , col_ni_total = "ni_total")
 
             df_metsc$Index <- as.numeric(df_metsc$Index)
 
@@ -300,9 +283,14 @@ shinyServer(function(input, output, session) {
             incProgress(1/n_inc, detail = "Create, summary report (~ 20 - 40 sec)")
             Sys.sleep(0.75)
 
+            # Summary report ####
+
             # Render Summary Report (rmarkdown file)
-            rmarkdown::render(input = file.path(".", "Extras", "Summary_SNEP.rmd"), output_format = "word_document",
-                              output_dir = file.path(".", "Results"), output_file = "results_summary_report", quiet = TRUE)
+            rmarkdown::render(input = file.path(".", "Extras", "Summary_SNEP.rmd")
+                              , output_format = "word_document"
+                              , output_dir = file.path(".", "Results")
+                              , output_file = "results_summary_report"
+                              , quiet = TRUE)
 
             # Increment the progress bar, and update the detail text.
             incProgress(1/n_inc, detail = "Ben's code is magical!")
@@ -312,6 +300,8 @@ shinyServer(function(input, output, session) {
             # Increment the progress bar, and update the detail text.
             incProgress(1/n_inc, detail = "Create, Zip")
             Sys.sleep(0.50)
+
+            # Zip results ####
 
             # Create zip file
             fn_4zip <- list.files(path = file.path(".", "Results")
@@ -347,10 +337,7 @@ shinyServer(function(input, output, session) {
         }##content~END
     )##downloadData~END
 
-    ########################
-    ##### Map Creation #####
-    ########################
-
+    # Data Explorer ####
 
     # create quantile color palette to change color of markers based on index values
     scale_range <- c(0,100)
@@ -376,7 +363,6 @@ shinyServer(function(input, output, session) {
                     , fill = FALSE
                     , label = MA_region_shape$BugClass
                     , group = "MA Regions"
-
         ) %>%
         addPolygons(data = basins_shape
                     , color = "green"
@@ -384,7 +370,6 @@ shinyServer(function(input, output, session) {
                     , fill = FALSE
                     , label = basins_shape$NAME
                     , group = "Major Basins"
-
         ) %>%
         addPolygons(data = SNEP_region
                     , color = "purple"
@@ -392,38 +377,38 @@ shinyServer(function(input, output, session) {
                     , fill = FALSE
                     , label = SNEP_region$Name
                     , group = "SNEP Region"
-
         ) %>%
         addCircleMarkers(data = df_4Map, lat = ~LAT, lng = ~LONG
-                         , group = "SNEP Sites", popup = paste("SampleID:", df_4Map$SAMPLEID, "<br>"
-                                                                  ,"Site Class:", df_4Map$INDEX_REGION, "<br>"
-                                                                  ,"Coll Date:", df_4Map$COLLDATE, "<br>"
-                                                                  ,"Unique ID:", df_4Map$STATIONID, "<br>"
-                                                                  ,"Score pi_OET:", round(df_4Map$SC_pi_OET,2), "<br>"
-                                                                  ,"Score pt_ffg_pred:", round(df_4Map$SC_pt_ffg_pred,2), "<br>"
-                                                                  ,"Score pt_NonIns:", round(df_4Map$SC_pt_NonIns,2), "<br>"
-                                                                  ,"Score pt_POET:", round(df_4Map$SC_pt_POET,2), "<br>"
-                                                                  ,"Score pt_tv_toler:", round(df_4Map$SC_pt_tv_toler,2), "<br>"
-                                                                  ,"Score pt_volt_semi:", round(df_4Map$SC_pt_volt_semi,2), "<br>"
-                                                                  ,"<b> Index Value:</b>", round(df_4Map$Index, 2), "<br>"
-                                                                  ,"<b> Narrative:</b>", df_4Map$Index_Nar)
-                         , color = "black", fillColor = ~qpal(Index), fillOpacity = 1, stroke = TRUE
+                         , group = "SNEP Sites"
+                         , popup = paste("SampleID:", df_4Map$SAMPLEID, "<br>"
+                                         ,"Site Class:", df_4Map$INDEX_REGION, "<br>"
+                                         ,"Coll Date:", df_4Map$COLLDATE, "<br>"
+                                         ,"Unique ID:", df_4Map$STATIONID, "<br>"
+                                         ,"Score pi_OET:", round(df_4Map$SC_pi_OET,2), "<br>"
+                                         ,"Score pt_ffg_pred:", round(df_4Map$SC_pt_ffg_pred,2), "<br>"
+                                         ,"Score pt_NonIns:", round(df_4Map$SC_pt_NonIns,2), "<br>"
+                                         ,"Score pt_POET:", round(df_4Map$SC_pt_POET,2), "<br>"
+                                         ,"Score pt_tv_toler:", round(df_4Map$SC_pt_tv_toler,2), "<br>"
+                                         ,"Score pt_volt_semi:", round(df_4Map$SC_pt_volt_semi,2), "<br>"
+                                         ,"<b> Index Value:</b>", round(df_4Map$Index, 2), "<br>"
+                                         ,"<b> Narrative:</b>", df_4Map$Index_Nar)
+                         , color = "black", fillColor = ~qpal(Index)
+                         , fillOpacity = 1, stroke = TRUE
                          , clusterOptions = markerClusterOptions()
-
         ) %>%
-
-        addLegend(pal = qpal,
-                  values = scale_range,
-                  position = "bottomright",
-                  title = "Index Scores",
-                  opacity = 1) %>%
+        addLegend(pal = qpal
+                  ,values = scale_range
+                  ,position = "bottomright"
+                  ,title = "Index Scores"
+                  ,opacity = 1) %>%
         addLayersControl(overlayGroups = c("SNEP Sites", "MA Regions", "SNEP Region" ,"Major Basins"),
                          baseGroups = c("Esri WSM", "Positron", "Toner Lite"),
                          options = layersControlOptions(collapsed = TRUE))%>%
         hideGroup(c("MA Regions", "SNEP Region" , "Major Basins")) %>%
         addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldStreetMap)
-
       }) ##renderLeaflet~END
+
+    ## Site select map ####
 
     # Map that filters output data to only a single site
    observeEvent(input$siteid.select,{
@@ -431,18 +416,14 @@ shinyServer(function(input, output, session) {
 
       df_4Map <- map_data$df_metsc
 
-      #
       df_filtered <- df_4Map[df_4Map$SAMPLEID == input$siteid.select, ]
 
-      #
       # get centroid (use mean just in case have duplicates)
       view.cent <- c(mean(df_filtered$LONG), mean(df_filtered$LAT))
-      #
+
       # modify map
       leafletProxy("mymap") %>%
-        #clearShapes() %>%  # removes all layers
         removeShape("layer_site_selected") %>%
-        #addPolylines(data=filteredData()
         addCircles(data=df_filtered
                    , lng=~LONG
                    , lat=~LAT
@@ -461,7 +442,7 @@ shinyServer(function(input, output, session) {
 
 
 
-    ########### Data Explorer Tab ######################
+    ## Plots ####
 
     df_sitefilt <- reactive({
       req(!is.null(map_data$df_metsc))
@@ -470,7 +451,6 @@ shinyServer(function(input, output, session) {
 
       df_all_scores[df_all_scores$SAMPLEID == input$siteid.select, ]
     })## reactive~ END
-
 
     output$DatExp_plot <- renderPlot({
       if (is.null(df_sitefilt()))
@@ -556,7 +536,6 @@ shinyServer(function(input, output, session) {
               panel.border = element_blank(),
               axis.line = element_line(color = "black"),
               legend.position = "none")
-
 
     }) ## renderPlot ~ END
 
