@@ -3,7 +3,7 @@ NEWS-SNEPtools
 
 <!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
 
-    #> Last Update: 2021-10-05 16:23:24
+    #> Last Update: 2021-10-14 15:29:02
 
 # SNEPtools v0.1.3.900 (2021-10-05)
 

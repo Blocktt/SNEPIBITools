@@ -17,18 +17,19 @@ function(){
              , mainPanel(
                tags$style(type = "text/css", "#map {height: calc(100vh - 80px) !important;}")
                # https://github.com/dreamRs/capture
-               # ,capture::capture(selector = "body"
-               #                   , filename = "all-page.png"
-               #                   , icon("camera-retro")
-               #                   , "Take screenshot of entire page"
-               #                   , class = "btn-primary")
-               # , br()
-               # , br()
-               # ,capture::capture(selector = "#mymap"
-               #                   , filename = "mymap.png"
-               #                   , icon("camera-retro")
-               #                   , "Take screenshot of map only"
-               #                   , class = "btn-info")
+               ,capture::capture(selector = "body"
+                                 , filename = "all-page.png"
+                                 , icon("camera-retro")
+                                 , "Take screenshot of entire page"
+                                 , class = "btn-primary")
+               , br()
+               , br()
+               ,capture::capture(selector = "#mymap"
+                                 , filename = "mymap.png"
+                                 , icon("camera-retro")
+                                 , "Take screenshot of map only"
+                                 , class = "btn-info")
+               , br()
                , leafletOutput("mymap", height = "85vh")
 
              )##mainPanel.END

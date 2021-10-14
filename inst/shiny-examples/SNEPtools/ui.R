@@ -22,22 +22,22 @@ tab_StoryMaps <- source("external/tab_StoryMaps.R", local = TRUE)$value
 #https://rstudio.github.io/bslib/articles/bslib.html
 #https://rstudio.github.io/bslib/articles/bs5-variables.html#form-check-radio-checked-bg-image
 #https://bootswatch.com/minty/
-
+# theme = bs_theme(bootswatch = "minty"
+#                  ,primary = "#0b5394"
+#                  ,secondary = "#79aa7b"
+#                  ,"navbar-bg" = "#acccb4"
+#                  ,"link-color" = "#fe9929"
+#                  ,"progress-bar-bg" = "#0b5394"
+#                  ,"pagination-active-bg" = "#79aa7b"
+#                  ,"pagination-hover-bg" = "#b4d48c"
+#                  ,"pagination-border-color" = "#b4d48c"
+#                  ,"pagination-hover-border-color" = "#b4d48c"
+#                  ,"pagination-active-border-color" = "#b4d48c"
+#                  ,"pagination-bg" = "#b4d48c"
+#                  ,"pagination-disabled-bg" = "#b4d48c")
 
 # Define UI
-shinyUI(navbarPage(theme = bs_theme(bootswatch = "minty"
-                                    ,primary = "#0b5394"
-                                    ,secondary = "#79aa7b"
-                                    ,"navbar-bg" = "#acccb4"
-                                    ,"link-color" = "#fe9929"
-                                    ,"progress-bar-bg" = "#0b5394"
-                                    ,"pagination-active-bg" = "#79aa7b"
-                                    ,"pagination-hover-bg" = "#b4d48c"
-                                    ,"pagination-border-color" = "#b4d48c"
-                                    ,"pagination-hover-border-color" = "#b4d48c"
-                                    ,"pagination-active-border-color" = "#b4d48c"
-                                    ,"pagination-bg" = "#b4d48c"
-                                    ,"pagination-disabled-bg" = "#b4d48c")
+shinyUI(navbarPage(theme = shinytheme("flatly")
                    ,"SNEP Stream IBI Calculator v0.1.3.900"
                    ,tab_Background()
                    ,tab_Instructions()

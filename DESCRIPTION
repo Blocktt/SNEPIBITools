@@ -30,7 +30,6 @@ Imports:
   mapview,
   stringr,
   shinythemes,
-  bslib,
   capture
 VignetteBuilder: knitr
 URL: https://github.com/Blocktt/SNEPtools
