@@ -31,16 +31,16 @@ Tetra Tech, Inc. developed the SNEPIBItools shiny app for the Southeast New Engl
 ## Preparing the input file
 SNEPIBItools requires input files to be in a tabular format, saved as either comma-separated values (CSV) (most commonly used) or tab-separated (.txt or .tsv) files. Table 1 contains a list of required fields. Column names must be capitalized and match the spelling and symbology exactly as shown (some column headings have underscores).
 
-Click here to view an [EXAMPLE INPUT FILE](https://github.com/Blocktt/SNEPtools/tree/main/inst/shiny-examples/SNEPtools/Examples).
+Click here to view an [EXAMPLE INPUT FILE](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Example_Data).
 
 The input data must be prepared in a way that is consistent with how the data were prepared for the calibration of the IBIs. For example, if you use a different level of taxonomic resolution (family vs. species-level) or trait assignments differ (e.g., Functional Feeding Groups do not match), this will affect the results. To ensure consistency, perform the following steps when preparing your input file:
 
-* Check your taxa list against the ‘FinalID’ field in the [TaxaTranslator table](https://github.com/Blocktt/SNEPtools/tree/main/Data_Prep). The use of consistent nomenclature is encouraged.
+* Check your taxa list against the ‘FinalID’ field in the [TaxaTranslator table](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Data_Prep). The use of consistent nomenclature is encouraged.
 * Remove any rows that have 0 individuals (e.g., Large/Rare taxa entries)
 * For each taxon, there should only be one entry per sample. For example, if entries are broken out by life stage (e.g., larvae, pupae), they should be ‘collapsed’ into one row per taxon/sample (by summing the individuals and deleting the life stage field)
 * Perform random subsampling if needed. For example, if you want to apply a 100-count kick IBI but have a 300-count sample, first reduce the total count of individuals to 100 (±20%)
-* Use NonTarget taxa designations and trait assignments (FFG, tolerance value, life cycle) that match with those in the appropriate [TaxaAttribute tables](https://github.com/Blocktt/SNEPtools/tree/main/Data_Prep). Taxa tolerance values differ slightly in low gradient vs. higher gradient (kick net) streams; thus, we created separate attribute tables for each stream type. Note: the TaxaID field in the attribute tables matches with the ‘FinalID’ field in the [TaxaTranslator table](https://github.com/Blocktt/SNEPtools/tree/main/Data_Prep) (which is further reason to use consistent nomenclature). 
-* Mark redundant (non-distinct) taxa in each sample in a way that is consistent with the criteria described in the [ExcludeDecisionCriteria](https://github.com/Blocktt/SNEPtools/tree/main/Data_Prep) document.
+* Use NonTarget taxa designations and trait assignments (FFG, tolerance value, life cycle) that match with those in the appropriate [TaxaAttribute tables](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Data_Prep). Taxa tolerance values differ slightly in low gradient vs. higher gradient (kick net) streams; thus, we created separate attribute tables for each stream type. Note: the TaxaID field in the attribute tables matches with the ‘FinalID’ field in the [TaxaTranslator table](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Data_Prep) (which is further reason to use consistent nomenclature). 
+* Mark redundant (non-distinct) taxa in each sample in a way that is consistent with the criteria described in the [ExcludeDecisionCriteria](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Data_Prep) document.
 * Make sure you select the correct IBI for each sample (which is entered into the ‘Index_Region’ column).
 
 You are now ready to run your file through the IBI calculator!
@@ -70,7 +70,7 @@ table1 %>%
 Once open, the user will see the IBI calculator interface. The user should follow the onscreen instructions as follows:
 
 1. Load file
-    + An example input file can be downloaded from Github [EXAMPLE LINK](https://github.com/Blocktt/SNEPtools/tree/main/inst/shiny-examples/SNEPtools/Examples)
+    + An example input file can be downloaded from Github [EXAMPLE LINK](https://github.com/Blocktt/ShinyAppDocuments/tree/main/SNEPtools/Example_Data)
     + Choose Separator. The separator indicates how the data is stored. Comma indicates the input file is a comma-separated file (.csv). Tab indicates the input file is a tab-separated file (.txt or .tsv). Finally, Semicolon indicates the input file is a semicolon-separated file which is uncommon in the United States but common in Western-European countries. Be certain that the designated separator is not used in any of the text fields (e.g., for multiple FFG, separate with a semicolon).
     + Choose Quote. The quote indicates how the data is stored. Double quote is the most common.
     + Choose file to upload. Hit the browse button and search for the input file. 
